@@ -119,6 +119,4 @@ Step 1. Attach the CloudWatchAgentServerPolicy IAM policy to your worker nodes:
 Replace my-worker-node-role with your node role
 Step 2. Use AWS CLI to install the Amazon CloudWatch Observability EKS add-on:
 `aws eks create-addon --addon-name amazon-cloudwatch-observability --cluster-name my-cluster-name`
-Replace my cluster name with your cluster name
-
-
+Replace my cluster name with your cluster 
