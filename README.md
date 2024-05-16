@@ -42,8 +42,6 @@ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default <SERVICE_NAME>
 echo $POSTGRES_PASSWORD
 ```
 
-<sup><sub>* The instructions are adapted from [Bitnami's PostgreSQL Helm Chart](https://artifacthub.io/packages/helm/bitnami/postgresql).</sub></sup>
-
 3. Test Database Connection
 The database is accessible within the cluster. This means that when you will have some issues connecting to it via your local environment. You can either connect to a pod that has access to the cluster _or_ connect remotely via [`Port Forwarding`](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 
@@ -100,32 +98,27 @@ The benefit here is that it's explicitly set. However, note that the `DB_PASSWOR
 * Generate report for check-ins grouped by users
 `curl <BASE_URL>/api/reports/user_visits`
 
-## Project Instructions
-1. Set up a Postgres database with a Helm Chart
-2. Create a `Dockerfile` for the Python application. Use a base image that is Python-based.
-3. Write a simple build pipeline with AWS CodeBuild to build and push a Docker image into AWS ECR
-4. Create a service and deployment using Kubernetes configuration files to deploy the application
-5. Check AWS CloudWatch for application logs
+4. Create a Dockerfile for the Python Application
+/workspace/cd12355-microservices-aws-kubernetes-project-starter/Dockerfile
 
-### Deliverables
-1. `Dockerfile`
-2. Screenshot of AWS CodeBuild pipeline
-3. Screenshot of AWS ECR repository for the application's repository
-4. Screenshot of `kubectl get svc`
-5. Screenshot of `kubectl get pods`
-6. Screenshot of `kubectl describe svc <DATABASE_SERVICE_NAME>`
-7. Screenshot of `kubectl describe deployment <SERVICE_NAME>`
-8. All Kubernetes config files used for deployment (ie YAML files)
-9. Screenshot of AWS CloudWatch logs for the application
-10. `README.md` file in your solution that serves as documentation for your user to detail how your deployment process works and how the user can deploy changes. The details should not simply rehash what you have done on a step by step basis. Instead, it should help an experienced software developer understand the technologies and tools in the build and deploy process as well as provide them insight into how they would release new builds.
+5. Write a Build Pipeline with AWS CodeBuild
+Create buildspec File: /workspace/cd12355-microservices-aws-kubernetes-project-starter/buildspec.yml
+
+6. Create Kubernetes Service and Deployment
+List Services
+`kubectl get svc`
+`kubectl describe svc`
+List Pods
+`kubectl get pods`
+List Deployments
+`kubectl get deployments`
+`kubectl describe deployment`
+7. CloudWatch
+Step 1. Attach the CloudWatchAgentServerPolicy IAM policy to your worker nodes:
+`aws iam attach-role-policy --role-name my-worker-node-role --policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy`
+Replace my-worker-node-role with your node role
+Step 2. Use AWS CLI to install the Amazon CloudWatch Observability EKS add-on:
+`aws eks create-addon --addon-name amazon-cloudwatch-observability --cluster-name my-cluster-name`
+Replace my cluster name with your cluster name
 
 
-### Stand Out Suggestions
-Please provide up to 3 sentences for each suggestion. Additional content in your submission from the standout suggestions do _not_ impact the length of your total submission.
-1. Specify reasonable Memory and CPU allocation in the Kubernetes deployment configuration
-2. In your README, specify what AWS instance type would be best used for the application? Why?
-3. In your README, provide your thoughts on how we can save on costs?
-
-### Best Practices
-* Dockerfile uses an appropriate base image for the application being deployed. Complex commands in the Dockerfile include a comment describing what it is doing.
-* The Docker images use semantic versioning with three numbers separated by dots, e.g. `1.2.1` and  versioning is visible in the  screenshot. See [Semantic Versioning](https://semver.org/) for more details.
